@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+
+  notrexroof:
+    image: "rexroof/notrexroof"
+    env_file: .env
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - local-opsdroid:/root/.local/share/opsdroid/
+      - ./blastfile.txt:/usr/src/app/blastfile.txt
+
+  redis:
+    image: redis:6.0.9
+    ports: [ 6379 ]
+
+volumes:
+  local-opsdroid:

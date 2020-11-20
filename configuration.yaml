@@ -14,8 +14,8 @@
 ## A default config file to use with opsdroid
 
 ## Set the logging level
-# logging:
-#   level: info
+logging:
+  level: debug
 #   path: opsdroid.log
 #   console: true
 #   extended: false
@@ -225,17 +225,18 @@ connectors:
 
 ## Database modules (optional)
 
-# databases:
+databases:
 #
 #  ## Redis (core)
-#  redis:
-#    host:       "my host"     # (optional) default "localhost"
-#    port:       "12345"       # (optional) default "6379"
-#    database:   7           # (optional) default 0
-#    password:   "pass123"     # (optional) default "None"
-#
+#    redis:
+#      host:       "redis"     # (optional) default "localhost"
+#      reconnect:  true
+    # port:       "12345"       # (optional) default "6379"
+    # database:   7           # (optional) default 0
+    # password:   "pass123"     # (optional) default "None"
+
 #  ## Sqlite (core)
-#  sqlite:
+   sqlite:
 #    file: "my_file.db"  # (optional) default "~/.opsdroid/sqlite.db"
 #    table: "my_table"  # (optional) default "opsdroid"
 #
@@ -249,18 +250,17 @@ connectors:
 
 ## Skill modules
 skills:
-
-  ## Dance (https://github.com/opsdroid/skill-dance)
-  dance: {}
-  
   ## Hello (https://github.com/opsdroid/skill-hello)
   hello: {}
   
-  ## Loudnoises (https://github.com/opsdroid/skill-loudnoises)
-  loudnoises: {}
-  
   ## Seen (https://github.com/opsdroid/skill-seen)
   seen: {}
+
+  blast:
+    path: /usr/src/app/skills/blast/
+  
+  reply:
+    path: /usr/src/app/skills/reply/
   
   # Configurations for other skills uncomment desired skill to activate it.
 #
