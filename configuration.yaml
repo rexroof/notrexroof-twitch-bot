@@ -262,6 +262,9 @@ skills:
   reply:
     path: /usr/src/app/skills/reply/
   
+  font-change:
+    path: /usr/src/app/skills/font-change/
+  
   # Configurations for other skills uncomment desired skill to activate it.
 #
 #  ## Cloudhealth (https://github.com/opsdroid/skill-cloudhealth)

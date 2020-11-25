@@ -12,6 +12,8 @@ services:
     volumes:
       - local-opsdroid:/root/.local/share/opsdroid/
       - ./blastfile.txt:/usr/src/app/blastfile.txt
+      - /home/rex/.config/alacritty/alacritty.yml:/usr/src/app/alacritty.yml
+      - ./skills:/usr/src/app/skills
 
   redis:
     image: redis:6.0.9

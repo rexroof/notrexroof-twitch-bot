@@ -1,3 +1,4 @@
 git+https://github.com/opsdroid/opsdroid.git#586f4333e708a5df0c5a098e9baca8cd478548d
 aioredis
 aiosqlite
+pyyaml
