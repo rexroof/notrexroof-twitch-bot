@@ -14,10 +14,19 @@ services:
       - ./blastfile.txt:/usr/src/app/blastfile.txt
       - /home/rex/.config/alacritty/alacritty.yml:/usr/src/app/alacritty.yml
       - ./skills:/usr/src/app/skills
+      - /home/rex/github/tmux/tmux:/usr/local/bin/tmux
+      - /tmp/tmux-1000:/tmp/tmux-1000
 
   redis:
     image: redis:6.0.9
     ports: [ 6379 ]
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - redis-data:/data
+    command:
+      - redis-server
+      - /usr/local/etc/redis/redis.conf
 
 volumes:
   local-opsdroid:
+  redis-data:
