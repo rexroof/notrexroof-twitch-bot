@@ -5,6 +5,7 @@ ENV PYTHONUNBUFFERED=1 PYTHONHASHSEED=random \
 
 WORKDIR /usr/src/app
 # ARG EXTRAS=.[all]
+RUN useradd rex -u 1000
 
 COPY requirements.txt .
 RUN apt-get update && apt-get install -y git gcc \
