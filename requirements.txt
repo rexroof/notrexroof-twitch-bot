@@ -1,4 +1,4 @@
-git+https://github.com/opsdroid/opsdroid.git#586f4333e708a5df0c5a098e9baca8cd478548d
+git+https://github.com/opsdroid/opsdroid.git#480cbaa2467597f6e12b883efad1304b447eb763
 aioredis
 aiosqlite
 pyyaml
