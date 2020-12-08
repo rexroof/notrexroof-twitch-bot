@@ -226,44 +226,36 @@ connectors:
 ## Database modules (optional)
 
 databases:
-#
+  #   sqlite: {}
 #  ## Redis (core)
-#    redis:
-#      host:       "redis"     # (optional) default "localhost"
-#      reconnect:  true
-    # port:       "12345"       # (optional) default "6379"
-    # database:   7           # (optional) default 0
-    # password:   "pass123"     # (optional) default "None"
-
-#  ## Sqlite (core)
-   sqlite:
+  redis:
+    host:       "redis"     # (optional) default "localhost"
+    reconnect:  true
+# database:   7           # (optional) default 0
+# password:   "pass123"     # (optional) default "None"
+# sqlite:
 #    file: "my_file.db"  # (optional) default "~/.opsdroid/sqlite.db"
 #    table: "my_table"  # (optional) default "opsdroid"
-#
-#  ## Mongo (core)
-#  mongo:
+# mongo:
 #    host:       "my host"     # (optional) default "localhost"
 #    port:       "12345"       # (optional) default "27017"
 #    database:   "mydatabase"  # (optional) default "opsdroid"
-#
-
 
 ## Skill modules
 skills:
-  ## Hello (https://github.com/opsdroid/skill-hello)
+  devtools: {}
   hello: {}
-  
-  ## Seen (https://github.com/opsdroid/skill-seen)
   seen: {}
-
   blast:
     path: /usr/src/app/skills/blast/
-  
   reply:
     path: /usr/src/app/skills/reply/
-  
   font-change:
     path: /usr/src/app/skills/font-change/
+    max_font_size: 60
+    min_font_size: 9
+  popup:
+    path: /usr/src/app/skills/popup/
   
   # Configurations for other skills uncomment desired skill to activate it.
 #
@@ -277,7 +269,6 @@ skills:
 #    monthly-billing-alerts: true  # Announce the previous month's bill each month
 #
 #  ## Devtools (https://github.com/opsdroid/skill-devtools)
-#  devtools: {}
 #
 #  ## Dialogflow (https://github.com/opsdroid/skill-dialogflow)
 #  dialogflow:
