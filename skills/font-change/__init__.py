@@ -5,7 +5,6 @@ import yaml
 import logging
 import os
 
-
 CONFIG_SCHEMA = {
     Required("max_font_size", default=45): int,
     Required("min_font_size", default=6): int,
@@ -18,6 +17,7 @@ class FontChange(Skill):
         self.max_font_size = config["max_font_size"]
         self.min_font_size = config["min_font_size"]
         logging.debug(f"Loaded font-change skill")
+
 
     def font_size(self, size):
         with open(self.yamlfile, "r+") as file:
@@ -35,13 +35,32 @@ class FontChange(Skill):
             yaml.dump(yamlconfig, file)
             file.truncate()
 
-    @match_regex(r"^!font face (.+)$")
+    @match_regex(r"^#\s*font face (.+)$")
     async def chat_face(self, message):
         face = message.regex.group(1)
         self.font_face(face)
         await message.respond(f'tried to change face to "{face}"')
 
-    @match_regex(r"^!font size ([\d]+)")
+    @match_regex(r"^#\s*font smaller")
+    async def smaller(self, message):
+        with open(self.yamlfile, "r+") as file:
+            yamlconfig = yaml.load(file, Loader=yaml.FullLoader)
+            yamlconfig["font"]["size"] -= 2
+            file.seek(0)
+            yaml.dump(yamlconfig, file)
+        await message.respond(f'tried to make font smaller')
+
+    @match_regex(r"^#\s*font bigger")
+    async def bigger(self, message):
+        with open(self.yamlfile, "r+") as file:
+            yamlconfig = yaml.load(file, Loader=yaml.FullLoader)
+            yamlconfig["font"]["size"] += 2
+            file.seek(0)
+            yaml.dump(yamlconfig, file)
+            file.truncate()
+        await message.respond(f'tried to make font bigger')
+
+    @match_regex(r"^#\s*font size ([\d]+)")
     async def chat_size(self, message):
         size = int(message.regex.group(1))
 
