@@ -48,7 +48,7 @@ class FontChange(Skill):
             yamlconfig["font"]["size"] -= 2
             file.seek(0)
             yaml.dump(yamlconfig, file)
-        await message.respond(f'tried to make font smaller')
+        logging.info(f"{message.user} made font smaller")
 
     @match_regex(r"^#\s*font bigger")
     async def bigger(self, message):
@@ -58,7 +58,7 @@ class FontChange(Skill):
             file.seek(0)
             yaml.dump(yamlconfig, file)
             file.truncate()
-        await message.respond(f'tried to make font bigger')
+        logging.info(f"{message.user} made font bigger")
 
     @match_regex(r"^#\s*font size ([\d]+)")
     async def chat_size(self, message):
@@ -66,7 +66,7 @@ class FontChange(Skill):
 
         if size >= self.min_font_size and size <= self.max_font_size:
             self.font_size(size)
-            await message.respond(f'tried to change size to "{size}"')
+            logging.info(f"{message.user} set font to {size}")
         else:
             await message.respond(
                 f"size must be between {self.min_font_size} and {self.max_font_size}"
