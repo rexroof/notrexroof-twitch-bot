@@ -11,11 +11,12 @@ services:
       - "8080:8080"
     volumes:
       - local-opsdroid:/root/.local/share/opsdroid/
-      - ./blastfile.txt:/usr/src/app/blastfile.txt
+      - /tmp/bottmp:/tmp/bottmp
       - /home/rex/.config/alacritty/alacritty.yml:/usr/src/app/alacritty.yml
       - ./skills:/usr/src/app/skills
-      - /home/rex/github/tmux/tmux:/usr/local/bin/tmux
+      - /usr/local/bin/tmux:/usr/local/bin/tmux
       - /tmp/tmux-1000:/tmp/tmux-1000
+      # - /tmp/obs-blastfile.txt:/usr/src/app/blastfile.txt
 
   redis:
     image: redis:6.0.9
