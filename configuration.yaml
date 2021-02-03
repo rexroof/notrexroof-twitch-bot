@@ -246,8 +246,8 @@ skills:
   devtools: {}
   hello: {}
   seen: {}
-  blast:
-    path: /usr/src/app/skills/blast/
+  awards:
+    path: /usr/src/app/skills/awards/
   reply:
     path: /usr/src/app/skills/reply/
   font-change:
