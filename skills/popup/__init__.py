@@ -41,7 +41,11 @@ class Popup(Skill):
 
     @match_regex(r"^#\s*aquarium")
     async def aquarium(self, message):
-        await self.tmux_popup("docker run --rm -it wernight/funbox asciiquarium")
+        await self.tmux_popup("docker run --rm -t wernight/funbox timeout --preserve-status -s 9 10 asciiquarium")
+
+    @match_regex(r"^#\s*steam train")
+    async def train(self, message):
+        await self.tmux_popup("docker run --rm -t wernight/funbox sl")
 
     @match_regex(r"^#\s*(kubectl|k) get pod")
     async def kgetpods(self, message):
