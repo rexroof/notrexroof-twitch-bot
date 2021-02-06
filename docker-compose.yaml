@@ -2,9 +2,20 @@ version: "3"
 
 services:
 
+  ngrok:
+    image: "wernight/ngrok"
+    command:
+      - ngrok
+      - http 
+      - notrexroof:8080
+      - -log=stdout
+
   notrexroof:
     image: "rexroof/notrexroof"
     env_file: .env
+    depends_on:
+      - "ngrok"
+      - "redis"
     build:
       context: .
     ports:

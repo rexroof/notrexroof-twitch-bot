@@ -104,14 +104,14 @@ connectors:
     client-id: ${CLIENT_ID}
     client-secret: ${CLIENT_SECRET}
     channel: ${TWITCH_CHANNEL}
+    foward-url: ${NGROK_URL}
     redirect: http://localhost/
-    # foward-url: 'http://94jfsd9ff.ngrok.io' # Either an URL provided by a forwarding service or an exposed ip address
     # optional
     always-listening: true
 
   websocket:
     # optional
-    bot-name: "mybot" # default "opsdroid"
+    bot-name: "notrexroof" # default "opsdroid"
     max-connections: 10 # default is 10 users can be connected at once
     connection-timeout: 10 # default 10 seconds before requested socket times out
   
