@@ -7,12 +7,8 @@ from opsdroid.matchers import match_regex, match_event, match_always
 from opsdroid.skill import Skill
 from opsdroid.events import JoinRoom
 
-# potentially toggle hello/goodbye without timeouts
-# case insensitive matches?
-# update patterns and responses, make them more rexish, or rexy, or rexington
-# todo:  command to check current points
-# handle multiple ++ -- in one message (merge to one function?)
-# case insensitive.
+# update hellos to make them more rexish, or rexy, or rexington
+# maybe restrict points given/taken per minute/hour?
 
 
 class Points(Skill):
@@ -71,18 +67,18 @@ class Points(Skill):
                 if await self.add_to_points(word, amt):
                     changed.append(word)
         if changed:
-            await message.respond("assigned points to " + " ".join(changed))
+            await message.respond("assigned points to " + " ".join(set(changed)))
 
-    @match_regex(r"^#\s*points(\s*(?P<u>[a-z0-9][\w]{2,24})?")
+    @match_regex(r"^#\s*points(\s*(?P<u>[a-z0-9][\w]{2,24}))?")
     async def respond_points(self, message):
-        target = await message.user
+        target = message.user
         if message.regex.group("u"):
             target = message.regex.group("u")
         p = await self.get_points(target)
-        s = ""
+        s = "s"
         if p == 1:
-            s = "s"
-        await message.respond("{target} has {p} point{s}")
+            s = ""
+        await message.respond(f"{target} has {p} point{s}")
 
     async def get_points(self, user):
         points = await self.opsdroid.memory.get("points")
