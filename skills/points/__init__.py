@@ -63,7 +63,7 @@ class Points(Skill):
                 amt = 1
             # remove plusses/minuses
             word = re.sub("[+-]", "", word)
-            if amt != 0 and is_user.search(word):
+            if amt != 0 and is_user.search(word) and message.user != word:
                 if await self.add_to_points(word, amt):
                     changed.append(word)
         if changed:
