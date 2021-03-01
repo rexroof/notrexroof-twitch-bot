@@ -58,9 +58,9 @@ class Points(Skill):
         for word in message.text.lower().split():
             amt = 0
             if word.endswith("--") or word.startswith("--"):
-                amt = -1
+                amt += -1
             if word.endswith("++") or word.startswith("++"):
-                amt = 1
+                amt += 1
             # remove plusses/minuses
             word = re.sub("[+-]", "", word)
             if amt != 0 and is_user.search(word) and message.user != word:
