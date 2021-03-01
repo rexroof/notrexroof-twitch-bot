@@ -67,7 +67,7 @@ class Points(Skill):
                 if await self.add_to_points(word, amt):
                     changed.append(word)
         if changed:
-            await message.respond("assigned points to " + " ".join(set(changed)))
+            await message.respond("adjusted points for " + " ".join(set(changed)))
 
     @match_regex(r"^#\s*points(\s*(?P<u>[a-z0-9][\w]{2,24}))?")
     async def respond_points(self, message):
