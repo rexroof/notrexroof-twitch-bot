@@ -69,6 +69,22 @@ class Points(Skill):
         if changed:
             await message.respond("adjusted points for " + " ".join(set(changed)))
 
+    @match_regex(r"^#\s*top points")
+    async def top_points(self, message):
+        points = await self.opsdroid.memory.get("points")
+        top = []
+        for k, v in sorted(points.items(), reverse=True, key=lambda x: x[1]["points"]):
+            top.append(f'{k} {v["points"]}')
+        await message.respond("highest points: " + ", ".join(top[0:4]))
+
+    @match_regex(r"^#\s*bottom points")
+    async def bottom_points(self, message):
+        points = await self.opsdroid.memory.get("points")
+        top = []
+        for k, v in sorted(points.items(), key=lambda x: x[1]["points"]):
+            top.append(f'{k} {v["points"]}')
+        await message.respond("lowest points: " + ", ".join(top[0:4]))
+
     @match_regex(r"^#\s*points(\s*(?P<u>[a-z0-9][\w]{2,24}))?")
     async def respond_points(self, message):
         target = message.user
