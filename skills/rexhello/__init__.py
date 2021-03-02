@@ -14,7 +14,7 @@ class RexHello(Skill):
     def __init__(self, opsdroid, config):
         super(RexHello, self).__init__(opsdroid, config)
         self.timepast = timedelta(hours=2)
-        logging.debug(f"Loaded rexhelo skill")
+        logging.debug(f"Loaded rexhello skill")
 
     @match_regex(r"hi|hello|hey|hallo|good morning|good afternoon|howdy")
     async def hello(self, message):
@@ -44,7 +44,7 @@ class RexHello(Skill):
         willsend = False
 
         if message.user in lastgoodbye:
-            if (lastgoodbye[message.user] + self.timepast) > datetime.now():
+            if (lastgoodbye[message.user] + self.timepast) < datetime.now():
                 willsend = True
         else:
             willsend = True
