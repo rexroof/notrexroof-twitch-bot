@@ -1,5 +1,6 @@
 from opsdroid.skill import Skill
 from opsdroid.matchers import match_regex, match_always
+from opsdroid.constraints import constrain_users
 import logging
 import re
 
@@ -20,6 +21,7 @@ class Reply(Skill):
                     await message.respond(f"{replies[token]}")
 
     @match_regex(r"^#\s*reply to #(?P<key>[\w]+) with (?P<response>.+)$")
+    @constrain_users(["rexroof"])
     async def reply_record(self, message):
         key = message.regex.group("key")
         response = message.regex.group("response")
@@ -31,6 +33,7 @@ class Reply(Skill):
         await message.respond(f'wrote "{key}" to memory')
 
     @match_regex(r"^#\s*delete reply !(?P<key>[\w]+)")
+    @constrain_users(["rexroof"])
     async def reply_del(self, message):
         key = message.regex.group("key")
         replies = await self.opsdroid.memory.get("replies")
