@@ -21,6 +21,8 @@ services:
     ports:
       - "8080:8080"
     volumes:
+      # if changing apps, clean twitch refresh token with this command:
+      #  docker-compose run notrexroof rm /root/.local/share/opsdroid/twitch.json
       - local-opsdroid:/root/.local/share/opsdroid/
       - /tmp/bottmp:/tmp/bottmp
       - /home/rex/.config/alacritty/alacritty.yml:/usr/src/app/alacritty.yml
