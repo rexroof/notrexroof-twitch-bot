@@ -1,5 +1,6 @@
 from opsdroid.skill import Skill
 from opsdroid.matchers import match_regex, match_always
+from opsdroid.constraints import constrain_users
 from voluptuous import Required
 import yaml
 import logging
@@ -10,6 +11,7 @@ CONFIG_SCHEMA = {
     Required("min_font_size", default=6): int,
 }
 
+
 class FontChange(Skill):
     def __init__(self, opsdroid, config):
         self.yamlfile = os.getenv("ALACRITTY_YAML", "/usr/src/app/alacritty.yml")
@@ -17,7 +19,6 @@ class FontChange(Skill):
         self.max_font_size = config["max_font_size"]
         self.min_font_size = config["min_font_size"]
         logging.debug(f"Loaded font-change skill")
-
 
     def font_size(self, size):
         with open(self.yamlfile, "r+") as file:
@@ -36,6 +37,7 @@ class FontChange(Skill):
             file.truncate()
 
     @match_regex(r"^#\s*font face (.+)$")
+    @constrain_users(["rexroof"])
     async def chat_face(self, message):
         face = message.regex.group(1)
         self.font_face(face)
