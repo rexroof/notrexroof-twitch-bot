@@ -1,4 +1,4 @@
-# Any of the fonts below will work, any partial name of the font can be used.
+# Any of the fonts below will work, partial name of the font can be used.
 Lilex Nerd Font Mono
 GoMono Nerd Font Mono
 BitstreamVeraSansMono Nerd Font Mono
