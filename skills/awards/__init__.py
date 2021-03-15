@@ -11,6 +11,8 @@ import subprocess
 import re
 import os
 
+base_image = "award.png"
+
 
 class Awards(Skill):
     def __init__(self, opsdroid, config):
@@ -19,7 +21,7 @@ class Awards(Skill):
         self.w = 1280
         self.h = 720
         self.cwd = os.path.dirname(os.path.realpath(__file__))
-        self.award_file = self.cwd + "/" + "award.png"
+        self.award_file = self.cwd + "/" + base_image
         self.background_file = "/tmp/bottmp/" + "background.png"
         self.font_file = self.cwd + "/" + "font.ttf"
 
