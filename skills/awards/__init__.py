@@ -2,6 +2,7 @@ from datetime import datetime
 from io import BytesIO
 from opsdroid.matchers import match_regex, match_always
 from opsdroid.skill import Skill
+from opsdroid.constraints import constrain_users
 from PIL import Image, ImageFont, ImageDraw
 import logging
 import random
@@ -68,12 +69,12 @@ class Awards(Skill):
         background = Image.new("RGBA", (self.w, self.h))  # my obs canvas
         background.save(self.background_file)
 
-    async def add_image(self, username="none"):
+    async def add_image(self, username="none", talk_title="no talk"):
         if not os.path.exists(self.background_file):
             await self.blank_background()
 
         bg = Image.open(self.background_file)
-        award = await self.award_image(username, "what is a k8s?")
+        award = await self.award_image(username, talk_title)
         award.thumbnail((self.w / 4, self.h / 4), Image.NEAREST)
         tmpw, tmph = award.size
         bg.paste(
@@ -82,12 +83,76 @@ class Awards(Skill):
         )
         bg.save(self.background_file)
 
+    def new_user(self, talks, user):
+        if talks is None:
+            talks = {}
+        if "current" not in talks:
+            talks["current"] = None
+        if "users" not in talks:
+            talks["users"] = {}
+        if user not in talks["users"]:
+            talks["users"][user] = {}
+        return talks
+
+    def new_talk(self, talks, title):
+        if talks is None:
+            talks = {}
+            talks["current"] = None
+        if title not in talks:
+            talks[title] = {"count": 0, "lastgiven": None}
+        return talks
+
+    @match_regex(r"^#\s*end talk")
+    @constrain_users(["rexroof"])
+    async def end_talk(self, message):
+        talks = await self.opsdroid.memory.get("talks")
+        if talks["current"]:
+            reply_text = f"ending talk {talks['current']}"
+            talks["current"] = None
+            await self.opsdroid.memory.put("talks", talks)
+        else:
+            reply_text = f"there is no running talk"
+        await message.respond(reply_text)
+
+    @match_regex(r"^#\s*start talk (?P<title>.+)")
+    @constrain_users(["rexroof"])
+    async def start_talk(self, message):
+        talk_title = message.regex.group("title")
+        talks = await self.opsdroid.memory.get("talks")
+        talks = self.new_talk(talks, talk_title)
+        talks[talk_title]["lastgiven"] = datetime.now()
+        talks[talk_title]["count"] += 1
+        talks["current"] = talk_title
+        await self.opsdroid.memory.put("talks", talks)
+        await message.respond(f"starting talk {talk_title}")
+
+    @match_regex(r"^#\s*mytalks")
+    async def mytalks(self, message):
+        talks = await self.opsdroid.memory.get("talks")
+        talks = self.new_user(talks, message.user)
+        u = talks["users"][message.user]
+        if len(u) > 0:
+            s = "s"
+            if len(u) == 1:
+                s = ""
+            await message.respond(f"{message.user} has watched {len(u)} talk{s}")
+        else:
+            await message.respond(
+                f"sorry {message.user}, you haven't claimed any talks"
+            )
+
     @match_regex(r"^#\s*claim")
     async def claim_award(self, message):
-        logging.debug(f"{message.user} claim_award")
-        logging.debug(os.getcwd())
-        logging.debug(os.path.dirname(os.path.realpath(__file__)))
-        await self.add_image(message.user)
+        talks = await self.opsdroid.memory.get("talks")
+        talks = self.new_user(talks, message.user)
+        if talks["current"]:
+            title = talks["current"]
+            logging.debug(f"{message.user} claim_award")
+            talks["users"][message.user][title] = datetime.now()
+            await self.opsdroid.memory.put("talks", talks)
+            await self.add_image(message.user, title)
+        else:
+            await message.respond(f"sorry {message.user}, no current talk")
 
     @match_regex(r"^#\s*wipeawards")
     async def wipe_background(self, message):
