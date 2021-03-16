@@ -13,7 +13,6 @@ DaddyTimeMono Nerd Font Mono
 DejaVuSansMono Nerd Font Mono
 DroidSansMono Nerd Font Mono
 FantasqueSansMono Nerd Font Mono
-FantasqueSansMono Nerd Font Mono
 FiraCode Nerd Font Mono
 FuraMono Nerd Font Mono
 GohuFont Nerd Font Mono
