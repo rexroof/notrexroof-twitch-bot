@@ -49,6 +49,10 @@ class Popup(Skill):
     async def popup_htop(self, message):
         await self.tmux_popup("htop")
 
+    @match_regex(r"^#\s*bonsai")
+    async def bonsai(self, message):
+        await self.tmux_popup(f"chat-bonsai.sh {message.user}")
+
     @match_regex(r"^#\s*(kubectl|k) get pod")
     async def kgetpods(self, message):
         await self.tmux_popup("kubectl get pods")
