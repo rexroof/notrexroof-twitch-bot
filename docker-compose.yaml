@@ -32,7 +32,8 @@ services:
       # - /tmp/obs-blastfile.txt:/usr/src/app/blastfile.txt
 
   redis:
-    image: redis:6.0.9
+    image: redis:6.2.1
+    container_name: bot-redis
     ports: [ 6379 ]
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
