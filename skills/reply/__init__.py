@@ -40,8 +40,6 @@ class Reply(Skill):
                         result = text
 
                     # add formats
-                    #  - username
-                    #  - counter
                     #  - arg to command? $1 & $2 ?
                     # add multiple replies, randomly choose between each
 
@@ -58,6 +56,17 @@ class Reply(Skill):
         if isinstance(replies[key], str):
             replies[key] = {"count": 0, "text": replies[key]}
         return replies
+
+    @match_regex(r"^#\s*delete reply #(?P<key>[\w]+)$")
+    @constrain_users(["rexroof"])
+    async def delete_reply(self, message):
+        key = message.regex.group("key")
+        replies = await self.opsdroid.memory.get("replies")
+        if replies.pop(key, None):
+            await self.opsdroid.memory.put("replies", replies)
+            await message.respond(f'deleted "{key}"')
+        else:
+            await message.respond(f'"{key}" not found')
 
     @match_regex(r"^#\s*reply to #(?P<key>[\w]+) with (?P<response>.+)$")
     @constrain_users(["rexroof"])
