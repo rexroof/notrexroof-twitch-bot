@@ -13,9 +13,20 @@ class Reply(Skill):
     @match_always
     async def token_reply(self, message):
         if hasattr(message, "text"):
-            mat = re.match(r"^#\s*(?P<token>[\w]+)", message.text)
+            mat = re.match(
+                r"^#\s*(?P<token>[\w]+)\s*(?P<one>[\w]+)?\s*(?P<two>[\w]+)?",
+                message.text,
+            )
             if hasattr(mat, "group") and mat.group("token"):
                 token = mat.group("token")
+                _one = ""
+                _two = ""
+
+                if mat.group("one"):
+                    _one = mat.group("one")
+                if mat.group("two"):
+                    _two = mat.group("two")
+
                 replies = await self.opsdroid.memory.get("replies")
                 if replies != None and token in replies:
                     # running this to possibly convert this item
@@ -27,8 +38,18 @@ class Reply(Skill):
                     _user = message.user
                     _count = replies[token]["count"]
 
+                    if "{two}" in text and not _two:
+                        await message.respond(f"#{token} requires two options")
+                        return
+
+                    if "{one}" in text and not _one:
+                        await message.respond(f"#{token} requires an option")
+                        return
+
                     try:
-                        result = text.format(user=_user, count=_count)
+                        result = text.format(
+                            user=_user, count=_count, one=_one, two=_two
+                        )
                     except KeyError as e:
                         logging.debug(f"reply keyerror {e}")
                         result = text
