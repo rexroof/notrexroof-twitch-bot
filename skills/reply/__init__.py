@@ -3,6 +3,7 @@ from opsdroid.matchers import match_regex, match_always
 from opsdroid.constraints import constrain_users
 import logging
 import re
+import random
 
 
 class Reply(Skill):
@@ -26,6 +27,7 @@ class Reply(Skill):
                     _one = mat.group("one")
                 if mat.group("two"):
                     _two = mat.group("two")
+                _random = "%.2f" % random.uniform(0, 101)
 
                 replies = await self.opsdroid.memory.get("replies")
                 if replies != None and token in replies:
@@ -48,7 +50,7 @@ class Reply(Skill):
 
                     try:
                         result = text.format(
-                            user=_user, count=_count, one=_one, two=_two
+                            user=_user, count=_count, one=_one, two=_two, random=_random
                         )
                     except KeyError as e:
                         logging.debug(f"reply keyerror {e}")
