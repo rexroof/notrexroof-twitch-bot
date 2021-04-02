@@ -31,7 +31,7 @@ class Popup(Skill):
         pty = matches.group(0)
 
         completed = subprocess.Popen(
-            ["su", "rex", "-c", f"tmux popup -c {pty} -w 80% -h 80% -K -R '{cmd}'"]
+            ["su", "rex", "-c", f"tmux popup -c {pty} -w 80% -h 80% '{cmd}'"]
         )
         return completed.returncode
 
