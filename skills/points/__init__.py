@@ -42,11 +42,20 @@ class Points(Skill):
             # say hi if first time seeing this user in a while, suggest a random command?
             lastchat = points[message.user]["lastchat"]
             if (lastchat is None) or ((lastchat + timedelta(hours=6)) < datetime.now()):
-                text = random.choice(["Hi {}", "Hello {}", "howdy {}"]).format(
-                    message.user
-                )
+                if message.user == "nperry0":
+                    text = random.choice(
+                        ["bugger off {}", "crappy day to you too, {}"]
+                    ).format(message.user)
+                else:
+                    text = random.choice(
+                        [
+                            "good local time of day to you, {}",
+                            "Hi {}",
+                            "Hello {}",
+                            "howdy {}",
+                        ]
+                    ).format(message.user)
                 await message.respond(text)
-
             points[message.user]["lastchat"] = datetime.now()
             await self.opsdroid.memory.put("points", points)
 
@@ -55,6 +64,7 @@ class Points(Skill):
     async def parse_add_subtract(self, message):
         is_user = re.compile(r"[a-z0-9][\w]{2,24}")  # looks like twitch id
         changed = []
+        reply_text = "new points for"
         for word in message.text.lower().split():
             amt = 0
             if word.endswith("--") or word.startswith("--"):
@@ -64,10 +74,12 @@ class Points(Skill):
             # remove plusses/minuses
             word = re.sub("[+-]", "", word)
             if amt != 0 and is_user.search(word) and message.user != word:
-                if await self.add_to_points(word, amt):
+                pt = await self.add_to_points(word, amt)
+                if pt:
+                    reply_text = f"{reply_text} {word}={pt}"
                     changed.append(word)
         if changed:
-            await message.respond("adjusted points for " + " ".join(set(changed)))
+            await message.respond(reply_text)
 
     @match_regex(r"^#\s*top points")
     async def top_points(self, message):
@@ -111,6 +123,6 @@ class Points(Skill):
             after = points[user]["points"]
             logging.debug(f"{user} went from {before} to {after}")
             await self.opsdroid.memory.put("points", points)
-            return True
+            return after
         else:
             return False
